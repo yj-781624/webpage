@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小明的个人空间 | 网页开发者</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">MING</a>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">首页</a></li>
+                <li><a href="#about" class="nav-link">关于我</a></li>
+                <li><a href="#skills" class="nav-link">技能</a></li>
+                <li><a href="#projects" class="nav-link">项目</a></li>
+                <li><a href="#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页英雄区域 -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>你好，我是 <span class="highlight">小明</span></h1>
+                <p>一名热爱编程与设计的计算机科学学生</p>
+                <a href="#projects" class="cta-button">查看我的作品</a>
+            </div>
+            <div class="hero-image">
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我区域 -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>关于我</h2>
+            <div class="about-content">
+                <p>我是哈佛大学CS50W课程的学生，对Web开发充满热情。我喜欢将复杂的想法转化为简洁、优雅的代码和用户体验。目前正在深入学习Python、JavaScript和现代前端框架。</p>
+                <div class="interests">
+                    <h3>我的兴趣</h3>
+                    <ul>
+                        <li>🚀 前端框架（React, Vue）</li>
+                        <li>🎨 UI/UX 设计</li>
+                        <li>🤖 人工智能与机器学习</li>
+                        <li>🎵 音乐与电影</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技能区域 -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>我的技能</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML5</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <h3>CSS3</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-js-square"></i>
+                    <h3>JavaScript</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="80%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-python"></i>
+                    <h3>Python</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目区域 -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>我的项目</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        
+                    </div>
+                    <div class="project-info">
+                        <h3>书评网站</h3>
+                        <p>一个基于Flask的书籍评论社区，用户可搜索图书、评分和评论。</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>Flask</span>
+                            <span>SQLite</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        
+                    </div>
+                    <div class="project-info">
+                        <h3>电商平台</h3>
+                        <p>使用Django构建的全功能电商网站，包含购物车和支付集成。</p>
+                        <div class="project-tech">
+                            <span>Django</span>
+                            <span>JavaScript</span>
+                            <span>Stripe API</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系区域 -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>联系我</h2>
+            <div class="contact-links">
+                <a href="mailto:your.email@example.com">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </a>
+                <a href="https://github.com/yourusername" target="_blank">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2025 小明. 基于CS50W课程作业构建</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
