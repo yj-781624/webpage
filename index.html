@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS时空隧道V2.0 - 前沿视觉艺术</title>
+    <title>CSS时空隧道V2.0 - 增强版视觉艺术</title>
     <style>
         /* 基础样式与CSS变量系统 */
         :root {
@@ -12,10 +12,11 @@
             --tunnel-depth: 1200px;
             --animation-speed: 1;
             --particle-count: 50;
-            --blend-mode: screen;
             --perspective: 1000px;
             --tunnel-layers: 8;
             --light-intensity: 0.7;
+            --filter-intensity: 0.5;
+            --blur-intensity: 2px;
         }
 
         * {
@@ -107,7 +108,7 @@
             backdrop-filter: blur(5px);
         }
 
-        /* 3D隧道场景 */
+        /* 3D隧道场景 - 使用多重背景替代混合模式 */
         .tunnel-3d-scene {
             position: relative;
             width: 100%;
@@ -115,9 +116,37 @@
             perspective: var(--perspective);
             perspective-origin: 50% 50%;
             transform-style: preserve-3d;
+            /* 使用多重背景创建复杂视觉效果 */
+            background: 
+                radial-gradient(circle at 20% 30%, 
+                    hsl(var(--primary-hue), 70%, 60%) 0%, 
+                    transparent 40%),
+                radial-gradient(circle at 80% 70%, 
+                    hsl(var(--secondary-hue), 70%, 60%) 0%, 
+                    transparent 40%),
+                radial-gradient(circle at 40% 80%, 
+                    hsl(calc(var(--primary-hue) + 60), 70%, 50%) 0%, 
+                    transparent 40%),
+                linear-gradient(135deg, 
+                    rgba(0, 0, 0, 0.2) 0%, 
+                    transparent 50%),
+                conic-gradient(
+                    from 0deg at 50% 50%,
+                    hsl(var(--primary-hue), 100%, 60%),
+                    hsl(var(--secondary-hue), 100%, 60%),
+                    hsl(calc(var(--primary-hue) + 120), 100%, 60%),
+                    hsl(var(--primary-hue), 100%, 60%)
+                );
+            background-blend-mode: overlay, screen, overlay, normal, normal;
+            filter: 
+                brightness(calc(0.8 + var(--light-intensity) * 0.4))
+                contrast(calc(1 + var(--filter-intensity) * 0.5))
+                saturate(calc(1 + var(--filter-intensity) * 0.3))
+                blur(calc(var(--blur-intensity) * 1px));
+            animation: scene-pulse calc(8s / var(--animation-speed)) infinite alternate;
         }
 
-        /* 多层隧道结构 */
+        /* 多层隧道结构 - 使用CSS滤镜替代混合模式 */
         .tunnel-layer {
             position: absolute;
             top: 50%;
@@ -135,7 +164,11 @@
             ) 1;
             animation: tunnel-rotate calc(20s / var(--animation-speed)) infinite linear;
             transform-style: preserve-3d;
-            mix-blend-mode: var(--blend-mode);
+            /* 使用滤镜和透明度创建层次效果 */
+            filter: 
+                brightness(calc(0.7 + var(--light-intensity) * 0.3))
+                hue-rotate(calc(var(--primary-hue) * 1deg));
+            opacity: calc(0.3 + var(--light-intensity) * 0.5);
         }
 
         /* 为不同层级设置不同的深度和动画 */
@@ -185,7 +218,7 @@
             margin-top: -20vmin;
         }
 
-        /* 中心视觉元素 - 使用clip-path创建复杂形状 */
+        /* 中心视觉元素 - 使用CSS滤镜和动画替代混合模式 */
         .center-vortex {
             position: absolute;
             top: 50%;
@@ -204,9 +237,11 @@
             animation: 
                 vortex-rotate calc(10s / var(--animation-speed)) infinite linear,
                 vortex-pulse 4s ease-in-out infinite alternate;
+            /* 使用滤镜创建发光效果替代混合模式 */
             filter: 
                 brightness(calc(0.8 + var(--light-intensity) * 0.4))
-                drop-shadow(0 0 20px hsl(var(--primary-hue), 100%, 50%));
+                drop-shadow(0 0 20px hsl(var(--primary-hue), 100%, 50%))
+                hue-rotate(calc(var(--primary-hue) * 1deg));
             clip-path: polygon(
                 0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 
                 100% 15%, 100% 85%, 85% 85%, 85% 100%, 
@@ -229,7 +264,7 @@
             animation: inner-glow 3s ease-in-out infinite alternate;
         }
 
-        /* 动态粒子系统 */
+        /* 动态粒子系统 - 使用不透明度和滤镜替代混合模式 */
         .particles-container {
             position: absolute;
             top: 0;
@@ -244,7 +279,9 @@
             border-radius: 50%;
             background: currentColor;
             animation: float-particle calc(20s / var(--animation-speed)) infinite linear;
-            mix-blend-mode: var(--blend-mode);
+            /* 使用不透明度和滤镜替代混合模式 */
+            opacity: calc(0.3 + var(--light-intensity) * 0.4);
+            filter: brightness(calc(1 + var(--light-intensity) * 0.5));
         }
 
         /* 生成不同特性的粒子 */
@@ -481,6 +518,23 @@
             }
         }
 
+        @keyframes scene-pulse {
+            0% {
+                filter: 
+                    brightness(calc(0.7 + var(--light-intensity) * 0.3))
+                    contrast(calc(1 + var(--filter-intensity) * 0.5))
+                    saturate(calc(1 + var(--filter-intensity) * 0.3))
+                    blur(calc(var(--blur-intensity) * 1px));
+            }
+            100% {
+                filter: 
+                    brightness(calc(1 + var(--light-intensity) * 0.5))
+                    contrast(calc(1.2 + var(--filter-intensity) * 0.7))
+                    saturate(calc(1.2 + var(--filter-intensity) * 0.5))
+                    blur(calc(var(--blur-intensity) * 0.5px));
+            }
+        }
+
         @keyframes inner-glow {
             0% {
                 opacity: 0.3;
@@ -555,8 +609,8 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>CSS时空隧道V2.0</h1>
-            <p>前沿CSS技术展示 - 3D变换、混合模式、动态属性与高级动画</p>
+            <h1>CSS时空隧道V2.0 - 增强版</h1>
+            <p>使用CSS滤镜、多重背景和高级动画替代混合模式</p>
         </header>
 
         <main class="main-content">
@@ -597,16 +651,11 @@
                         <input type="range" id="speedControl" min="0.1" max="3" step="0.1" value="1">
                     </div>
                     <div class="control-group">
-                        <label for="blendMode">
-                            混合模式
+                        <label for="filterControl">
+                            滤镜强度
+                            <span class="control-value" id="filterValue">50%</span>
                         </label>
-                        <select id="blendMode">
-                            <option value="normal">正常</option>
-                            <option value="screen" selected>滤色</option>
-                            <option value="overlay">叠加</option>
-                            <option value="difference">差值</option>
-                            <option value="multiply">正片叠底</option>
-                        </select>
+                        <input type="range" id="filterControl" min="0" max="100" value="50">
                     </div>
                 </div>
                 
@@ -644,6 +693,13 @@
                         </label>
                         <input type="range" id="particleControl" min="10" max="100" value="50">
                     </div>
+                    <div class="control-group">
+                        <label for="blurControl">
+                            模糊强度
+                            <span class="control-value" id="blurValue">2px</span>
+                        </label>
+                        <input type="range" id="blurControl" min="0" max="10" value="2">
+                    </div>
                     <div class="control-buttons">
                         <button id="randomizeBtn">随机效果</button>
                         <button id="preset1Btn">预设1: 深空蓝</button>
@@ -655,7 +711,7 @@
         </main>
 
         <footer class="footer">
-            <p>© 2025 CSS时空隧道V2.0 - 前沿CSS技术实现 | 3D变换、混合模式、动态属性与高级动画</p>
+            <p>© 2025 CSS时空隧道V2.0 - 使用CSS滤镜、多重背景和高级动画技术</p>
         </footer>
     </div>
 
@@ -702,11 +758,12 @@
             // 获取DOM元素
             const hueControl = document.getElementById('hueControl');
             const speedControl = document.getElementById('speedControl');
-            const blendMode = document.getElementById('blendMode');
+            const filterControl = document.getElementById('filterControl');
             const depthControl = document.getElementById('depthControl');
             const perspectiveControl = document.getElementById('perspectiveControl');
             const lightControl = document.getElementById('lightControl');
             const particleControl = document.getElementById('particleControl');
+            const blurControl = document.getElementById('blurControl');
             const randomizeBtn = document.getElementById('randomizeBtn');
             const preset1Btn = document.getElementById('preset1Btn');
             const preset2Btn = document.getElementById('preset2Btn');
@@ -715,10 +772,12 @@
             // 获取显示值的元素
             const hueValue = document.getElementById('hueValue');
             const speedValue = document.getElementById('speedValue');
+            const filterValue = document.getElementById('filterValue');
             const depthValue = document.getElementById('depthValue');
             const perspectiveValue = document.getElementById('perspectiveValue');
             const lightValue = document.getElementById('lightValue');
             const particleValue = document.getElementById('particleValue');
+            const blurValue = document.getElementById('blurValue');
             
             // 更新色调
             hueControl.addEventListener('input', function() {
@@ -747,9 +806,11 @@
                 speedValue.textContent = speedLabels[speed] || '自定义';
             });
             
-            // 更新混合模式
-            blendMode.addEventListener('change', function() {
-                document.documentElement.style.setProperty('--blend-mode', this.value);
+            // 更新滤镜强度
+            filterControl.addEventListener('input', function() {
+                const filter = this.value / 100;
+                document.documentElement.style.setProperty('--filter-intensity', filter);
+                filterValue.textContent = `${this.value}%`;
             });
             
             // 更新隧道深度
@@ -780,6 +841,13 @@
                 particleValue.textContent = particles;
             });
             
+            // 更新模糊强度
+            blurControl.addEventListener('input', function() {
+                const blur = this.value;
+                document.documentElement.style.setProperty('--blur-intensity', blur);
+                blurValue.textContent = `${blur}px`;
+            });
+            
             // 随机效果
             randomizeBtn.addEventListener('click', function() {
                 // 随机色调
@@ -795,6 +863,12 @@
                 speedControl.value = randomSpeed;
                 document.documentElement.style.setProperty('--animation-speed', randomSpeed);
                 speedValue.textContent = '随机';
+                
+                // 随机滤镜强度
+                const randomFilter = Math.floor(Math.random() * 100);
+                filterControl.value = randomFilter;
+                document.documentElement.style.setProperty('--filter-intensity', randomFilter / 100);
+                filterValue.textContent = `${randomFilter}%`;
                 
                 // 随机深度
                 const randomDepth = Math.floor(Math.random() * 1500) + 500;
@@ -820,11 +894,11 @@
                 generateParticles(randomParticles);
                 particleValue.textContent = randomParticles;
                 
-                // 随机混合模式
-                const blendModes = ['normal', 'screen', 'overlay', 'difference', 'multiply'];
-                const randomBlendMode = blendModes[Math.floor(Math.random() * blendModes.length)];
-                blendMode.value = randomBlendMode;
-                document.documentElement.style.setProperty('--blend-mode', randomBlendMode);
+                // 随机模糊
+                const randomBlur = Math.floor(Math.random() * 10);
+                blurControl.value = randomBlur;
+                document.documentElement.style.setProperty('--blur-intensity', randomBlur);
+                blurValue.textContent = `${randomBlur}px`;
             });
             
             // 预设1: 深空蓝
@@ -835,12 +909,21 @@
                 document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
                 hueValue.textContent = '220°';
                 
-                blendMode.value = 'screen';
-                document.documentElement.style.setProperty('--blend-mode', 'screen');
-                
                 speedControl.value = 1;
                 document.documentElement.style.setProperty('--animation-speed', '1');
                 speedValue.textContent = '正常';
+                
+                filterControl.value = 30;
+                document.documentElement.style.setProperty('--filter-intensity', '0.3');
+                filterValue.textContent = '30%';
+                
+                lightControl.value = 50;
+                document.documentElement.style.setProperty('--light-intensity', '0.5');
+                lightValue.textContent = '50%';
+                
+                blurControl.value = 1;
+                document.documentElement.style.setProperty('--blur-intensity', '1');
+                blurValue.textContent = '1px';
             });
             
             // 预设2: 霓虹紫
@@ -851,16 +934,21 @@
                 document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
                 hueValue.textContent = '300°';
                 
-                blendMode.value = 'overlay';
-                document.documentElement.style.setProperty('--blend-mode', 'overlay');
-                
                 speedControl.value = 1.5;
                 document.documentElement.style.setProperty('--animation-speed', '1.5');
                 speedValue.textContent = '快速';
                 
+                filterControl.value = 80;
+                document.documentElement.style.setProperty('--filter-intensity', '0.8');
+                filterValue.textContent = '80%';
+                
                 lightControl.value = 90;
                 document.documentElement.style.setProperty('--light-intensity', '0.9');
                 lightValue.textContent = '90%';
+                
+                blurControl.value = 3;
+                document.documentElement.style.setProperty('--blur-intensity', '3');
+                blurValue.textContent = '3px';
             });
             
             // 重置效果
@@ -875,8 +963,9 @@
                 document.documentElement.style.setProperty('--animation-speed', '1');
                 speedValue.textContent = '正常';
                 
-                blendMode.value = 'screen';
-                document.documentElement.style.setProperty('--blend-mode', 'screen');
+                filterControl.value = 50;
+                document.documentElement.style.setProperty('--filter-intensity', '0.5');
+                filterValue.textContent = '50%';
                 
                 depthControl.value = 1200;
                 document.documentElement.style.setProperty('--tunnel-depth', '1200px');
@@ -893,6 +982,10 @@
                 particleControl.value = 50;
                 generateParticles(50);
                 particleValue.textContent = '50';
+                
+                blurControl.value = 2;
+                document.documentElement.style.setProperty('--blur-intensity', '2');
+                blurValue.textContent = '2px';
             });
         });
     </script>
