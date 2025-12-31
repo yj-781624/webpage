@@ -3,62 +3,652 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS艺术时光机 - 动态视觉体验</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CSS时空隧道 - 动态视觉艺术</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3e 50%, #0f1430 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 容器和布局 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 头部样式 */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(106, 17, 203, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        /* 时空隧道容器 */
+        .tunnel-container {
+            position: relative;
+            height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 时空隧道场景 */
+        .tunnel-scene {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+            perspective-origin: 50% 50%;
+        }
+
+        /* 隧道墙壁 */
+        .tunnel-wall {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, rgba(106, 17, 203, 0.7), rgba(37, 117, 252, 0.7));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: tunnelMove 15s infinite linear;
+            opacity: 0.7;
+            transform-style: preserve-3d;
+        }
+
+        /* 隧道墙壁位置和动画延迟 */
+        .tunnel-wall:nth-child(1) {
+            transform: translateZ(-1000px) rotateX(75deg);
+            animation-delay: 0s;
+        }
+
+        .tunnel-wall:nth-child(2) {
+            transform: translateZ(-800px) rotateX(75deg);
+            animation-delay: 1s;
+        }
+
+        .tunnel-wall:nth-child(3) {
+            transform: translateZ(-600px) rotateX(75deg);
+            animation-delay: 2s;
+        }
+
+        .tunnel-wall:nth-child(4) {
+            transform: translateZ(-400px) rotateX(75deg);
+            animation-delay: 3s;
+        }
+
+        .tunnel-wall:nth-child(5) {
+            transform: translateZ(-200px) rotateX(75deg);
+            animation-delay: 4s;
+        }
+
+        /* 中心视觉元素 */
+        .center-element {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.5));
+            border-radius: 50%;
+            box-shadow: 
+                0 0 60px rgba(106, 17, 203, 0.7),
+                0 0 120px rgba(37, 117, 252, 0.5);
+            animation: pulse 4s ease-in-out infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .center-element::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                rgba(106, 17, 203, 0.9),
+                rgba(37, 117, 252, 0.9),
+                rgba(106, 17, 203, 0.9)
+            );
+            animation: rotate 10s linear infinite;
+            filter: blur(15px);
+            opacity: 0.7;
+        }
+
+        .center-text {
+            position: relative;
+            z-index: 2;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 控制面板 */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-panel h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            color: #6a11cb;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .control-group span {
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #6a11cb;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.7);
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.6);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* 动画定义 */
+        @keyframes tunnelMove {
+            0% {
+                transform: translateZ(-1000px) rotateX(75deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateZ(1000px) rotateX(75deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 
+                    0 0 60px rgba(106, 17, 203, 0.7),
+                    0 0 120px rgba(37, 117, 252, 0.5);
+            }
+            100% {
+                transform: scale(1.1);
+                box-shadow: 
+                    0 0 80px rgba(106, 17, 203, 0.9),
+                    0 0 140px rgba(37, 117, 252, 0.7);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tunnel-container {
+                height: 400px;
+            }
+            
+            .center-element {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+            
+            .tunnel-container {
+                height: 300px;
+            }
+            
+            .center-element {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .center-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>CSS艺术时光机</h1>
-            <p>探索纯CSS创造的视觉奇迹</p>
+            <h1>CSS时空隧道</h1>
+            <p>探索纯CSS创造的3D视觉奇迹与动态艺术体验</p>
         </header>
 
         <main class="main-content">
-            <section class="art-gallery">
-                <div class="gallery-title">
-                    <h2>动态艺术展厅</h2>
-                    <div class="title-decoration"></div>
-                </div>
-                
-                <div class="art-container">
-                    <!-- 浮动粒子系统 -->
-                    <div class="particle-system" id="particles">
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                    </div>
+            <section class="tunnel-container">
+                <div class="tunnel-scene">
+                    <!-- 时空隧道墙壁 -->
+                    <div class="tunnel-wall"></div>
+                    <div class="tunnel-wall"></div>
+                    <div class="tunnel-wall"></div>
+                    <div class="tunnel-wall"></div>
+                    <div class="tunnel-wall"></div>
                     
-                    <!-- 中心艺术元素 -->
-                    <div class="center-art">
-                        <div class="rotating-ring"></div>
-                        <div class="glowing-core"></div>
+                    <!-- 中心视觉元素 -->
+                    <div class="center-element">
+                        <div class="center-text">时空之门</div>
                     </div>
                 </div>
             </section>
 
             <section class="control-panel">
-                <h3>视觉效果控制器</h3>
+                <h2>视觉效果控制器</h2>
                 <div class="controls">
                     <div class="control-group">
-                        <label for="speedControl">动画速度</label>
+                        <label for="speedControl">
+                            动画速度
+                            <span id="speedValue">中等</span>
+                        </label>
                         <input type="range" id="speedControl" min="1" max="10" value="5">
                     </div>
                     <div class="control-group">
-                        <label for="colorControl">色彩主题</label>
+                        <label for="colorControl">
+                            色彩主题
+                            <span id="colorValue">科技蓝</span>
+                        </label>
                         <input type="range" id="colorControl" min="1" max="3" value="1">
                     </div>
+                    <div class="control-group">
+                        <label for="tunnelSize">
+                            隧道尺寸
+                            <span id="sizeValue">标准</span>
+                        </label>
+                        <input type="range" id="tunnelSize" min="1" max="5" value="3">
+                    </div>
+                </div>
+                <div class="control-buttons">
+                    <button id="playPauseBtn">暂停动画</button>
+                    <button id="randomizeBtn">随机效果</button>
                     <button id="resetBtn">重置效果</button>
                 </div>
             </section>
         </main>
 
         <footer class="footer">
-            <p>© 2025 CSS艺术时光机 - 纯前端技术实现</p>
+            <p>© 2025 CSS时空隧道 - 纯前端技术实现 | 使用CSS 3D变换与动画技术</p>
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // 交互功能实现
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const speedControl = document.getElementById('speedControl');
+            const colorControl = document.getElementById('colorControl');
+            const tunnelSize = document.getElementById('tunnelSize');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const randomizeBtn = document.getElementById('randomizeBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const tunnelWalls = document.querySelectorAll('.tunnel-wall');
+            const centerElement = document.querySelector('.center-element');
+            
+            // 获取显示值的元素
+            const speedValue = document.getElementById('speedValue');
+            const colorValue = document.getElementById('colorValue');
+            const sizeValue = document.getElementById('sizeValue');
+            
+            // 初始化变量
+            let isPlaying = true;
+            let currentSpeed = 5;
+            let currentColor = 1;
+            let currentSize = 3;
+            
+            // 速度控制事件监听
+            speedControl.addEventListener('input', function() {
+                currentSpeed = parseInt(this.value);
+                updateSpeedValue();
+                updateAnimations();
+            });
+            
+            // 颜色主题控制事件监听
+            colorControl.addEventListener('input', function() {
+                currentColor = parseInt(this.value);
+                updateColorValue();
+                updateColorTheme();
+            });
+            
+            // 隧道尺寸控制事件监听
+            tunnelSize.addEventListener('input', function() {
+                currentSize = parseInt(this.value);
+                updateSizeValue();
+                updateTunnelSize();
+            });
+            
+            // 播放/暂停按钮事件监听
+            playPauseBtn.addEventListener('click', function() {
+                isPlaying = !isPlaying;
+                toggleAnimations();
+                playPauseBtn.textContent = isPlaying ? '暂停动画' : '播放动画';
+            });
+            
+            // 随机效果按钮事件监听
+            randomizeBtn.addEventListener('click', function() {
+                randomizeEffects();
+            });
+            
+            // 重置按钮事件监听
+            resetBtn.addEventListener('click', function() {
+                resetEffects();
+            });
+            
+            // 更新速度显示值
+            function updateSpeedValue() {
+                const speedLabels = ['非常慢', '慢', '较慢', '稍慢', '中等', '稍快', '较快', '快', '很快', '非常快'];
+                speedValue.textContent = speedLabels[currentSpeed - 1];
+            }
+            
+            // 更新颜色显示值
+            function updateColorValue() {
+                const colorLabels = ['科技蓝', '神秘紫', '霓虹粉'];
+                colorValue.textContent = colorLabels[currentColor - 1];
+            }
+            
+            // 更新尺寸显示值
+            function updateSizeValue() {
+                const sizeLabels = ['很小', '小', '标准', '大', '很大'];
+                sizeValue.textContent = sizeLabels[currentSize - 1];
+            }
+            
+            // 更新动画速度
+            function updateAnimations() {
+                const speedFactor = currentSpeed / 5;
+                
+                // 更新隧道墙壁动画速度
+                tunnelWalls.forEach(wall => {
+                    wall.style.animationDuration = `${15 / speedFactor}s`;
+                });
+                
+                // 更新中心元素脉冲动画速度
+                const pulseAnimation = getComputedStyle(centerElement).animation;
+                centerElement.style.animation = pulseAnimation.replace(/\d+s/, `${4 / speedFactor}s`);
+            }
+            
+            // 更新颜色主题
+            function updateColorTheme() {
+                const root = document.documentElement;
+                
+                switch(currentColor) {
+                    case 1: // 科技蓝
+                        root.style.setProperty('--primary-color', '#6a11cb');
+                        root.style.setProperty('--secondary-color', '#2575fc');
+                        updateTunnelColors('#6a11cb', '#2575fc');
+                        break;
+                    case 2: // 神秘紫
+                        root.style.setProperty('--primary-color', '#8A2BE2');
+                        root.style.setProperty('--secondary-color', '#DA70D6');
+                        updateTunnelColors('#8A2BE2', '#DA70D6');
+                        break;
+                    case 3: // 霓虹粉
+                        root.style.setProperty('--primary-color', '#FF0099');
+                        root.style.setProperty('--secondary-color', '#FF9900');
+                        updateTunnelColors('#FF0099', '#FF9900');
+                        break;
+                }
+            }
+            
+            // 更新隧道颜色
+            function updateTunnelColors(color1, color2) {
+                tunnelWalls.forEach(wall => {
+                    wall.style.background = `linear-gradient(45deg, ${color1}70, ${color2}70)`;
+                });
+                
+                centerElement.style.background = `radial-gradient(circle, ${color1}80, ${color2}50)`;
+                centerElement.style.boxShadow = 
+                    `0 0 60px ${color1}70, 0 0 120px ${color2}50`;
+            }
+            
+            // 更新隧道尺寸
+            function updateTunnelSize() {
+                const sizeFactors = [0.7, 0.85, 1, 1.15, 1.3];
+                const sizeFactor = sizeFactors[currentSize - 1];
+                
+                tunnelWalls.forEach((wall, index) => {
+                    const baseSize = 200;
+                    const newSize = baseSize * sizeFactor;
+                    wall.style.width = `${newSize}px`;
+                    wall.style.height = `${newSize}px`;
+                });
+                
+                const centerSize = 150 * sizeFactor;
+                centerElement.style.width = `${centerSize}px`;
+                centerElement.style.height = `${centerSize}px`;
+            }
+            
+            // 切换动画播放状态
+            function toggleAnimations() {
+                tunnelWalls.forEach(wall => {
+                    if (isPlaying) {
+                        wall.style.animationPlayState = 'running';
+                    } else {
+                        wall.style.animationPlayState = 'paused';
+                    }
+                });
+                
+                if (isPlaying) {
+                    centerElement.style.animationPlayState = 'running';
+                } else {
+                    centerElement.style.animationPlayState = 'paused';
+                }
+            }
+            
+            // 随机化效果
+            function randomizeEffects() {
+                // 随机速度 (1-10)
+                const randomSpeed = Math.floor(Math.random() * 10) + 1;
+                speedControl.value = randomSpeed;
+                currentSpeed = randomSpeed;
+                updateSpeedValue();
+                
+                // 随机颜色 (1-3)
+                const randomColor = Math.floor(Math.random() * 3) + 1;
+                colorControl.value = randomColor;
+                currentColor = randomColor;
+                updateColorValue();
+                
+                // 随机尺寸 (1-5)
+                const randomSize = Math.floor(Math.random() * 5) + 1;
+                tunnelSize.value = randomSize;
+                currentSize = randomSize;
+                updateSizeValue();
+                
+                // 应用所有更改
+                updateAnimations();
+                updateColorTheme();
+                updateTunnelSize();
+            }
+            
+            // 重置效果
+            function resetEffects() {
+                speedControl.value = 5;
+                colorControl.value = 1;
+                tunnelSize.value = 3;
+                
+                currentSpeed = 5;
+                currentColor = 1;
+                currentSize = 3;
+                
+                updateSpeedValue();
+                updateColorValue();
+                updateSizeValue();
+                
+                // 确保动画在播放状态
+                isPlaying = true;
+                playPauseBtn.textContent = '暂停动画';
+                
+                updateAnimations();
+                updateColorTheme();
+                updateTunnelSize();
+                toggleAnimations();
+            }
+            
+            // 初始化颜色变量
+            document.documentElement.style.setProperty('--primary-color', '#6a11cb');
+            document.documentElement.style.setProperty('--secondary-color', '#2575fc');
+            
+            // 初始化显示值
+            updateSpeedValue();
+            updateColorValue();
+            updateSizeValue();
+        });
+    </script>
 </body>
 </html>
