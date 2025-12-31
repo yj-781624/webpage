@@ -345,3 +345,47 @@ body {
         height: 50px;
     }
 }
+/* 高级滑块样式 */
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none; /* 兼容 WebKit 内核的旧版浏览器 (如 Safari, 旧版 Chrome) */
+    appearance: none; /* 标准属性，供现代浏览器使用 */
+    transition: all 0.3s ease;
+}
+
+/* 为滑块拇指（thumb）也移除默认样式并自定义（重要！） */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* 移除 WebKit 浏览器中滑块的默认样式 */
+    appearance: none; /* 标准属性 */
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    /* 对于 Firefox，需要单独设置 */
+    height: 18px;
+    width: 18px;
+    border: none;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-ms-thumb {
+    /* 如需兼容旧版 Edge/IE */
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    border: none;
+}
