@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS艺术时光机 - 动态视觉体验</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>CSS艺术时光机</h1>
+            <p>探索纯CSS创造的视觉奇迹</p>
+        </header>
+
+        <main class="main-content">
+            <section class="art-gallery">
+                <div class="gallery-title">
+                    <h2>动态艺术展厅</h2>
+                    <div class="title-decoration"></div>
+                </div>
+                
+                <div class="art-container">
+                    <!-- 浮动粒子系统 -->
+                    <div class="particle-system" id="particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                    
+                    <!-- 中心艺术元素 -->
+                    <div class="center-art">
+                        <div class="rotating-ring"></div>
+                        <div class="glowing-core"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="control-panel">
+                <h3>视觉效果控制器</h3>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="speedControl">动画速度</label>
+                        <input type="range" id="speedControl" min="1" max="10" value="5">
+                    </div>
+                    <div class="control-group">
+                        <label for="colorControl">色彩主题</label>
+                        <input type="range" id="colorControl" min="1" max="3" value="1">
+                    </div>
+                    <button id="resetBtn">重置效果</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© 2025 CSS艺术时光机 - 纯前端技术实现</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
