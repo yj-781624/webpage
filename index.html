@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS时空隧道 - 动态视觉艺术</title>
+    <title>CSS时空隧道V2.0 - 前沿视觉艺术</title>
     <style>
-        /* 基础样式重置 */
+        /* 基础样式与CSS变量系统 */
+        :root {
+            --primary-hue: 220;
+            --secondary-hue: 300;
+            --tunnel-depth: 1200px;
+            --animation-speed: 1;
+            --particle-count: 50;
+            --blend-mode: screen;
+            --perspective: 1000px;
+            --tunnel-layers: 8;
+            --light-intensity: 0.7;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +26,16 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3e 50%, #0f1430 100%);
+            background: 
+                radial-gradient(circle at 20% 80%, 
+                    hsl(calc(var(--primary-hue) - 20), 80%, 10%) 0%, 
+                    transparent 50%),
+                radial-gradient(circle at 80% 20%, 
+                    hsl(var(--secondary-hue), 80%, 10%) 0%, 
+                    transparent 50%),
+                linear-gradient(135deg, 
+                    hsl(calc(var(--primary-hue) - 10), 70%, 5%) 0%, 
+                    hsl(var(--secondary-hue), 70%, 5%) 100%);
             color: #e0e0e0;
             min-height: 100vh;
             overflow-x: hidden;
@@ -23,7 +44,7 @@
 
         /* 容器和布局 */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             display: flex;
@@ -35,22 +56,26 @@
         .header {
             text-align: center;
             padding: 40px 0;
-            animation: fadeInDown 1.5s ease-out;
+            position: relative;
+            z-index: 100;
         }
 
         .header h1 {
-            font-size: 3.5rem;
-            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            background: linear-gradient(45deg, 
+                hsl(var(--primary-hue), 100%, 70%), 
+                hsl(var(--secondary-hue), 100%, 70%));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 15px;
             text-shadow: 0 0 30px rgba(106, 17, 203, 0.3);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-weight: 900;
         }
 
         .header p {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 2vw, 1.3rem);
             opacity: 0.85;
             max-width: 600px;
             margin: 0 auto;
@@ -65,190 +90,346 @@
             margin-top: 20px;
         }
 
-        /* 时空隧道容器 */
-        .tunnel-container {
+        /* 高级时空隧道容器 */
+        .advanced-tunnel {
             position: relative;
-            height: 500px;
+            height: 65vh;
+            min-height: 500px;
             border-radius: 20px;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 100px rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(5px);
         }
 
-        /* 时空隧道场景 */
-        .tunnel-scene {
+        /* 3D隧道场景 */
+        .tunnel-3d-scene {
             position: relative;
             width: 100%;
             height: 100%;
-            perspective: 1000px;
+            perspective: var(--perspective);
             perspective-origin: 50% 50%;
-        }
-
-        /* 隧道墙壁 */
-        .tunnel-wall {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(45deg, rgba(106, 17, 203, 0.7), rgba(37, 117, 252, 0.7));
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            animation: tunnelMove 15s infinite linear;
-            opacity: 0.7;
             transform-style: preserve-3d;
         }
 
-        /* 隧道墙壁位置和动画延迟 */
-        .tunnel-wall:nth-child(1) {
-            transform: translateZ(-1000px) rotateX(75deg);
-            animation-delay: 0s;
-        }
-
-        .tunnel-wall:nth-child(2) {
-            transform: translateZ(-800px) rotateX(75deg);
-            animation-delay: 1s;
-        }
-
-        .tunnel-wall:nth-child(3) {
-            transform: translateZ(-600px) rotateX(75deg);
-            animation-delay: 2s;
-        }
-
-        .tunnel-wall:nth-child(4) {
-            transform: translateZ(-400px) rotateX(75deg);
-            animation-delay: 3s;
-        }
-
-        .tunnel-wall:nth-child(5) {
-            transform: translateZ(-200px) rotateX(75deg);
-            animation-delay: 4s;
-        }
-
-        /* 中心视觉元素 */
-        .center-element {
+        /* 多层隧道结构 */
+        .tunnel-layer {
             position: absolute;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.5));
+            top: 50%;
+            left: 50%;
+            width: 80vmin;
+            height: 80vmin;
+            margin-left: -40vmin;
+            margin-top: -40vmin;
+            border: 2px solid;
+            border-image: conic-gradient(
+                from 0deg at 50% 50%,
+                hsl(var(--primary-hue), 100%, 70%),
+                hsl(var(--secondary-hue), 100%, 70%),
+                hsl(var(--primary-hue), 100%, 70%)
+            ) 1;
+            animation: tunnel-rotate calc(20s / var(--animation-speed)) infinite linear;
+            transform-style: preserve-3d;
+            mix-blend-mode: var(--blend-mode);
+        }
+
+        /* 为不同层级设置不同的深度和动画 */
+        .tunnel-layer:nth-child(1) {
+            transform: translateZ(calc(var(--tunnel-depth) * -1)) rotateX(75deg);
+            animation-duration: calc(25s / var(--animation-speed));
+            opacity: 0.8;
+        }
+
+        .tunnel-layer:nth-child(2) {
+            transform: translateZ(calc(var(--tunnel-depth) * -0.75)) rotateX(75deg);
+            animation-duration: calc(22s / var(--animation-speed));
+            opacity: 0.7;
+            width: 70vmin;
+            height: 70vmin;
+            margin-left: -35vmin;
+            margin-top: -35vmin;
+        }
+
+        .tunnel-layer:nth-child(3) {
+            transform: translateZ(calc(var(--tunnel-depth) * -0.5)) rotateX(75deg);
+            animation-duration: calc(19s / var(--animation-speed));
+            opacity: 0.6;
+            width: 60vmin;
+            height: 60vmin;
+            margin-left: -30vmin;
+            margin-top: -30vmin;
+        }
+
+        .tunnel-layer:nth-child(4) {
+            transform: translateZ(calc(var(--tunnel-depth) * -0.25)) rotateX(75deg);
+            animation-duration: calc(16s / var(--animation-speed));
+            opacity: 0.5;
+            width: 50vmin;
+            height: 50vmin;
+            margin-left: -25vmin;
+            margin-top: -25vmin;
+        }
+
+        .tunnel-layer:nth-child(5) {
+            transform: translateZ(0px) rotateX(75deg);
+            animation-duration: calc(13s / var(--animation-speed));
+            opacity: 0.4;
+            width: 40vmin;
+            height: 40vmin;
+            margin-left: -20vmin;
+            margin-top: -20vmin;
+        }
+
+        /* 中心视觉元素 - 使用clip-path创建复杂形状 */
+        .center-vortex {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20vmin;
+            height: 20vmin;
+            margin-left: -10vmin;
+            margin-top: -10vmin;
+            background: conic-gradient(
+                from 0deg,
+                hsl(var(--primary-hue), 100%, 70%),
+                hsl(var(--secondary-hue), 100%, 70%),
+                hsl(var(--primary-hue), 100%, 70%)
+            );
             border-radius: 50%;
-            box-shadow: 
-                0 0 60px rgba(106, 17, 203, 0.7),
-                0 0 120px rgba(37, 117, 252, 0.5);
-            animation: pulse 4s ease-in-out infinite alternate;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            animation: 
+                vortex-rotate calc(10s / var(--animation-speed)) infinite linear,
+                vortex-pulse 4s ease-in-out infinite alternate;
+            filter: 
+                brightness(calc(0.8 + var(--light-intensity) * 0.4))
+                drop-shadow(0 0 20px hsl(var(--primary-hue), 100%, 50%));
+            clip-path: polygon(
+                0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 
+                100% 15%, 100% 85%, 85% 85%, 85% 100%, 
+                15% 100%, 15% 85%, 0% 85%
+            );
+            transform-style: preserve-3d;
             z-index: 10;
         }
 
-        .center-element::before {
+        .center-vortex::before {
             content: '';
             position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(10px);
+            animation: inner-glow 3s ease-in-out infinite alternate;
+        }
+
+        /* 动态粒子系统 */
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
             border-radius: 50%;
-            background: conic-gradient(
-                rgba(106, 17, 203, 0.9),
-                rgba(37, 117, 252, 0.9),
-                rgba(106, 17, 203, 0.9)
-            );
-            animation: rotate 10s linear infinite;
-            filter: blur(15px);
-            opacity: 0.7;
+            background: currentColor;
+            animation: float-particle calc(20s / var(--animation-speed)) infinite linear;
+            mix-blend-mode: var(--blend-mode);
         }
 
-        .center-text {
-            position: relative;
-            z-index: 2;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        /* 生成不同特性的粒子 */
+        .particle:nth-child(3n+1) {
+            width: 4px;
+            height: 4px;
+            background: hsl(var(--primary-hue), 100%, 80%);
+            animation-duration: calc(25s / var(--animation-speed));
         }
 
-        /* 控制面板 */
-        .control-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
+        .particle:nth-child(3n+2) {
+            width: 6px;
+            height: 6px;
+            background: hsl(var(--secondary-hue), 100%, 80%);
+            animation-duration: calc(30s / var(--animation-speed));
+            animation-delay: -5s;
+        }
+
+        .particle:nth-child(3n+3) {
+            width: 3px;
+            height: 3px;
+            background: white;
+            animation-duration: calc(35s / var(--animation-speed));
+            animation-delay: -10s;
+        }
+
+        /* 高级控制面板 */
+        .advanced-controls {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .control-panel h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8rem;
-            color: #6a11cb;
-        }
-
-        .controls {
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .control-section {
+            display: flex;
+            flex-direction: column;
             gap: 20px;
+        }
+
+        .control-section h3 {
+            font-size: 1.3rem;
+            color: hsl(var(--primary-hue), 100%, 70%);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-section h3::before {
+            content: '';
+            width: 4px;
+            height: 1.3rem;
+            background: linear-gradient(to bottom, 
+                hsl(var(--primary-hue), 100%, 70%), 
+                hsl(var(--secondary-hue), 100%, 70%));
+            border-radius: 2px;
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .control-group label {
-            font-weight: bold;
             display: flex;
             justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .control-group span {
+        .control-value {
             font-weight: normal;
             opacity: 0.8;
         }
 
-        .control-group input[type="range"] {
+        /* 高级滑块样式 */
+        input[type="range"] {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border-radius: 3px;
             outline: none;
             -webkit-appearance: none;
+            transition: all 0.3s ease;
         }
 
-        .control-group input[type="range"]::-webkit-slider-thumb {
+        input[type="range"]:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #6a11cb;
+            background: linear-gradient(45deg, 
+                hsl(var(--primary-hue), 100%, 70%), 
+                hsl(var(--secondary-hue), 100%, 70%));
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(106, 17, 203, 0.7);
+            box-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+            transition: all 0.2s ease;
         }
 
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(106, 17, 203, 0.7);
+        }
+
+        /* 选择框样式 */
+        select {
+            padding: 12px 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        select:hover, select:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        select option {
+            background: #1a1a3e;
+            color: white;
+        }
+
+        /* 按钮样式 */
         .control-buttons {
             display: flex;
-            justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         button {
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            background: linear-gradient(45deg, 
+                hsl(var(--primary-hue), 100%, 50%), 
+                hsl(var(--secondary-hue), 100%, 50%));
             border: none;
             padding: 12px 25px;
-            border-radius: 30px;
+            border-radius: 10px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
 
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.6);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
         button:active {
@@ -265,80 +446,94 @@
             font-size: 0.9rem;
         }
 
-        /* 动画定义 */
-        @keyframes tunnelMove {
+        /* 高级动画定义 */
+        @keyframes tunnel-rotate {
             0% {
-                transform: translateZ(-1000px) rotateX(75deg);
+                transform: translateZ(calc(var(--tunnel-depth) * -1)) rotateX(75deg) rotateZ(0deg);
+            }
+            100% {
+                transform: translateZ(calc(var(--tunnel-depth) * -1)) rotateX(75deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes vortex-rotate {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        @keyframes vortex-pulse {
+            0% {
+                filter: 
+                    brightness(calc(0.8 + var(--light-intensity) * 0.4))
+                    drop-shadow(0 0 10px hsl(var(--primary-hue), 100%, 50%));
+            }
+            100% {
+                filter: 
+                    brightness(calc(1 + var(--light-intensity) * 0.6))
+                    drop-shadow(0 0 30px hsl(var(--primary-hue), 100%, 70%));
+            }
+        }
+
+        @keyframes inner-glow {
+            0% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0.7;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes float-particle {
+            0%, 100% {
+                transform: 
+                    translate3d(0, 0, 0) 
+                    rotate(0deg);
                 opacity: 0;
             }
             10% {
-                opacity: 0.7;
+                opacity: 1;
             }
             90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateZ(1000px) rotateX(75deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 
-                    0 0 60px rgba(106, 17, 203, 0.7),
-                    0 0 120px rgba(37, 117, 252, 0.5);
-            }
-            100% {
-                transform: scale(1.1);
-                box-shadow: 
-                    0 0 80px rgba(106, 17, 203, 0.9),
-                    0 0 140px rgba(37, 117, 252, 0.7);
-            }
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
                 opacity: 1;
-                transform: translateY(0);
+            }
+            100% {
+                transform: 
+                    translate3d(
+                        calc((var(--random-x) - 0.5) * 100vw),
+                        calc((var(--random-y) - 0.5) * 100vh),
+                        calc(var(--random-z) * 1000px)
+                    ) 
+                    rotate(calc(var(--random-rotate) * 360deg));
+                opacity: 0;
             }
         }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.5rem;
+            .advanced-tunnel {
+                height: 50vh;
             }
             
-            .tunnel-container {
-                height: 400px;
-            }
-            
-            .center-element {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .controls {
+            .advanced-controls {
                 grid-template-columns: 1fr;
+                padding: 20px;
             }
             
             .control-buttons {
                 flex-direction: column;
+            }
+            
+            button {
+                min-width: auto;
             }
         }
 
@@ -348,20 +543,11 @@
             }
             
             .header p {
-                font-size: 1.1rem;
-            }
-            
-            .tunnel-container {
-                height: 300px;
-            }
-            
-            .center-element {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .center-text {
                 font-size: 1rem;
+            }
+            
+            .advanced-tunnel {
+                height: 40vh;
             }
         }
     </style>
@@ -369,285 +555,345 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>CSS时空隧道</h1>
-            <p>探索纯CSS创造的3D视觉奇迹与动态艺术体验</p>
+            <h1>CSS时空隧道V2.0</h1>
+            <p>前沿CSS技术展示 - 3D变换、混合模式、动态属性与高级动画</p>
         </header>
 
         <main class="main-content">
-            <section class="tunnel-container">
-                <div class="tunnel-scene">
-                    <!-- 时空隧道墙壁 -->
-                    <div class="tunnel-wall"></div>
-                    <div class="tunnel-wall"></div>
-                    <div class="tunnel-wall"></div>
-                    <div class="tunnel-wall"></div>
-                    <div class="tunnel-wall"></div>
+            <section class="advanced-tunnel">
+                <div class="tunnel-3d-scene">
+                    <!-- 多层隧道结构 -->
+                    <div class="tunnel-layer"></div>
+                    <div class="tunnel-layer"></div>
+                    <div class="tunnel-layer"></div>
+                    <div class="tunnel-layer"></div>
+                    <div class="tunnel-layer"></div>
                     
                     <!-- 中心视觉元素 -->
-                    <div class="center-element">
-                        <div class="center-text">时空之门</div>
+                    <div class="center-vortex"></div>
+                    
+                    <!-- 动态粒子系统 -->
+                    <div class="particles-container" id="particlesContainer">
+                        <!-- 粒子将通过JavaScript动态生成 -->
                     </div>
                 </div>
             </section>
 
-            <section class="control-panel">
-                <h2>视觉效果控制器</h2>
-                <div class="controls">
+            <section class="advanced-controls">
+                <div class="control-section">
+                    <h3>视觉效果控制</h3>
+                    <div class="control-group">
+                        <label for="hueControl">
+                            主色调
+                            <span class="control-value" id="hueValue">220°</span>
+                        </label>
+                        <input type="range" id="hueControl" min="0" max="360" value="220">
+                    </div>
                     <div class="control-group">
                         <label for="speedControl">
                             动画速度
-                            <span id="speedValue">中等</span>
+                            <span class="control-value" id="speedValue">正常</span>
                         </label>
-                        <input type="range" id="speedControl" min="1" max="10" value="5">
+                        <input type="range" id="speedControl" min="0.1" max="3" step="0.1" value="1">
                     </div>
                     <div class="control-group">
-                        <label for="colorControl">
-                            色彩主题
-                            <span id="colorValue">科技蓝</span>
+                        <label for="blendMode">
+                            混合模式
                         </label>
-                        <input type="range" id="colorControl" min="1" max="3" value="1">
-                    </div>
-                    <div class="control-group">
-                        <label for="tunnelSize">
-                            隧道尺寸
-                            <span id="sizeValue">标准</span>
-                        </label>
-                        <input type="range" id="tunnelSize" min="1" max="5" value="3">
+                        <select id="blendMode">
+                            <option value="normal">正常</option>
+                            <option value="screen" selected>滤色</option>
+                            <option value="overlay">叠加</option>
+                            <option value="difference">差值</option>
+                            <option value="multiply">正片叠底</option>
+                        </select>
                     </div>
                 </div>
-                <div class="control-buttons">
-                    <button id="playPauseBtn">暂停动画</button>
-                    <button id="randomizeBtn">随机效果</button>
-                    <button id="resetBtn">重置效果</button>
+                
+                <div class="control-section">
+                    <h3>3D空间设置</h3>
+                    <div class="control-group">
+                        <label for="depthControl">
+                            隧道深度
+                            <span class="control-value" id="depthValue">1200px</span>
+                        </label>
+                        <input type="range" id="depthControl" min="500" max="2000" value="1200">
+                    </div>
+                    <div class="control-group">
+                        <label for="perspectiveControl">
+                            透视距离
+                            <span class="control-value" id="perspectiveValue">1000px</span>
+                        </label>
+                        <input type="range" id="perspectiveControl" min="500" max="2000" value="1000">
+                    </div>
+                    <div class="control-group">
+                        <label for="lightControl">
+                            光照强度
+                            <span class="control-value" id="lightValue">70%</span>
+                        </label>
+                        <input type="range" id="lightControl" min="0" max="100" value="70">
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>系统控制</h3>
+                    <div class="control-group">
+                        <label for="particleControl">
+                            粒子密度
+                            <span class="control-value" id="particleValue">50</span>
+                        </label>
+                        <input type="range" id="particleControl" min="10" max="100" value="50">
+                    </div>
+                    <div class="control-buttons">
+                        <button id="randomizeBtn">随机效果</button>
+                        <button id="preset1Btn">预设1: 深空蓝</button>
+                        <button id="preset2Btn">预设2: 霓虹紫</button>
+                        <button id="resetBtn">重置效果</button>
+                    </div>
                 </div>
             </section>
         </main>
 
         <footer class="footer">
-            <p>© 2025 CSS时空隧道 - 纯前端技术实现 | 使用CSS 3D变换与动画技术</p>
+            <p>© 2025 CSS时空隧道V2.0 - 前沿CSS技术实现 | 3D变换、混合模式、动态属性与高级动画</p>
         </footer>
     </div>
 
     <script>
-        // 交互功能实现
+        // 动态粒子系统生成
+        function generateParticles(count) {
+            const container = document.getElementById('particlesContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // 随机位置和动画参数
+                const randomX = Math.random();
+                const randomY = Math.random();
+                const randomZ = Math.random();
+                const randomRotate = Math.random();
+                const randomSize = Math.random() * 4 + 2;
+                const randomDelay = Math.random() * 20;
+                
+                // 设置粒子样式
+                particle.style.cssText = `
+                    --random-x: ${randomX};
+                    --random-y: ${randomY};
+                    --random-z: ${randomZ};
+                    --random-rotate: ${randomRotate};
+                    left: ${randomX * 100}%;
+                    top: ${randomY * 100}%;
+                    width: ${randomSize}px;
+                    height: ${randomSize}px;
+                    animation-delay: -${randomDelay}s;
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 初始化变量和控件
         document.addEventListener('DOMContentLoaded', function() {
+            // 生成初始粒子
+            generateParticles(50);
+            
             // 获取DOM元素
+            const hueControl = document.getElementById('hueControl');
             const speedControl = document.getElementById('speedControl');
-            const colorControl = document.getElementById('colorControl');
-            const tunnelSize = document.getElementById('tunnelSize');
-            const playPauseBtn = document.getElementById('playPauseBtn');
+            const blendMode = document.getElementById('blendMode');
+            const depthControl = document.getElementById('depthControl');
+            const perspectiveControl = document.getElementById('perspectiveControl');
+            const lightControl = document.getElementById('lightControl');
+            const particleControl = document.getElementById('particleControl');
             const randomizeBtn = document.getElementById('randomizeBtn');
+            const preset1Btn = document.getElementById('preset1Btn');
+            const preset2Btn = document.getElementById('preset2Btn');
             const resetBtn = document.getElementById('resetBtn');
-            const tunnelWalls = document.querySelectorAll('.tunnel-wall');
-            const centerElement = document.querySelector('.center-element');
             
             // 获取显示值的元素
+            const hueValue = document.getElementById('hueValue');
             const speedValue = document.getElementById('speedValue');
-            const colorValue = document.getElementById('colorValue');
-            const sizeValue = document.getElementById('sizeValue');
+            const depthValue = document.getElementById('depthValue');
+            const perspectiveValue = document.getElementById('perspectiveValue');
+            const lightValue = document.getElementById('lightValue');
+            const particleValue = document.getElementById('particleValue');
             
-            // 初始化变量
-            let isPlaying = true;
-            let currentSpeed = 5;
-            let currentColor = 1;
-            let currentSize = 3;
-            
-            // 速度控制事件监听
-            speedControl.addEventListener('input', function() {
-                currentSpeed = parseInt(this.value);
-                updateSpeedValue();
-                updateAnimations();
+            // 更新色调
+            hueControl.addEventListener('input', function() {
+                const hue = this.value;
+                const secondaryHue = (parseInt(hue) + 80) % 360;
+                
+                document.documentElement.style.setProperty('--primary-hue', hue);
+                document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
+                hueValue.textContent = `${hue}°`;
             });
-            
-            // 颜色主题控制事件监听
-            colorControl.addEventListener('input', function() {
-                currentColor = parseInt(this.value);
-                updateColorValue();
-                updateColorTheme();
-            });
-            
-            // 隧道尺寸控制事件监听
-            tunnelSize.addEventListener('input', function() {
-                currentSize = parseInt(this.value);
-                updateSizeValue();
-                updateTunnelSize();
-            });
-            
-            // 播放/暂停按钮事件监听
-            playPauseBtn.addEventListener('click', function() {
-                isPlaying = !isPlaying;
-                toggleAnimations();
-                playPauseBtn.textContent = isPlaying ? '暂停动画' : '播放动画';
-            });
-            
-            // 随机效果按钮事件监听
-            randomizeBtn.addEventListener('click', function() {
-                randomizeEffects();
-            });
-            
-            // 重置按钮事件监听
-            resetBtn.addEventListener('click', function() {
-                resetEffects();
-            });
-            
-            // 更新速度显示值
-            function updateSpeedValue() {
-                const speedLabels = ['非常慢', '慢', '较慢', '稍慢', '中等', '稍快', '较快', '快', '很快', '非常快'];
-                speedValue.textContent = speedLabels[currentSpeed - 1];
-            }
-            
-            // 更新颜色显示值
-            function updateColorValue() {
-                const colorLabels = ['科技蓝', '神秘紫', '霓虹粉'];
-                colorValue.textContent = colorLabels[currentColor - 1];
-            }
-            
-            // 更新尺寸显示值
-            function updateSizeValue() {
-                const sizeLabels = ['很小', '小', '标准', '大', '很大'];
-                sizeValue.textContent = sizeLabels[currentSize - 1];
-            }
             
             // 更新动画速度
-            function updateAnimations() {
-                const speedFactor = currentSpeed / 5;
+            speedControl.addEventListener('input', function() {
+                const speed = parseFloat(this.value);
+                document.documentElement.style.setProperty('--animation-speed', speed);
                 
-                // 更新隧道墙壁动画速度
-                tunnelWalls.forEach(wall => {
-                    wall.style.animationDuration = `${15 / speedFactor}s`;
-                });
+                const speedLabels = {
+                    0.1: '极慢',
+                    0.5: '慢速',
+                    1: '正常',
+                    1.5: '快速',
+                    2: '极快',
+                    3: '超快'
+                };
                 
-                // 更新中心元素脉冲动画速度
-                const pulseAnimation = getComputedStyle(centerElement).animation;
-                centerElement.style.animation = pulseAnimation.replace(/\d+s/, `${4 / speedFactor}s`);
-            }
+                speedValue.textContent = speedLabels[speed] || '自定义';
+            });
             
-            // 更新颜色主题
-            function updateColorTheme() {
-                const root = document.documentElement;
-                
-                switch(currentColor) {
-                    case 1: // 科技蓝
-                        root.style.setProperty('--primary-color', '#6a11cb');
-                        root.style.setProperty('--secondary-color', '#2575fc');
-                        updateTunnelColors('#6a11cb', '#2575fc');
-                        break;
-                    case 2: // 神秘紫
-                        root.style.setProperty('--primary-color', '#8A2BE2');
-                        root.style.setProperty('--secondary-color', '#DA70D6');
-                        updateTunnelColors('#8A2BE2', '#DA70D6');
-                        break;
-                    case 3: // 霓虹粉
-                        root.style.setProperty('--primary-color', '#FF0099');
-                        root.style.setProperty('--secondary-color', '#FF9900');
-                        updateTunnelColors('#FF0099', '#FF9900');
-                        break;
-                }
-            }
+            // 更新混合模式
+            blendMode.addEventListener('change', function() {
+                document.documentElement.style.setProperty('--blend-mode', this.value);
+            });
             
-            // 更新隧道颜色
-            function updateTunnelColors(color1, color2) {
-                tunnelWalls.forEach(wall => {
-                    wall.style.background = `linear-gradient(45deg, ${color1}70, ${color2}70)`;
-                });
-                
-                centerElement.style.background = `radial-gradient(circle, ${color1}80, ${color2}50)`;
-                centerElement.style.boxShadow = 
-                    `0 0 60px ${color1}70, 0 0 120px ${color2}50`;
-            }
+            // 更新隧道深度
+            depthControl.addEventListener('input', function() {
+                const depth = this.value;
+                document.documentElement.style.setProperty('--tunnel-depth', `${depth}px`);
+                depthValue.textContent = `${depth}px`;
+            });
             
-            // 更新隧道尺寸
-            function updateTunnelSize() {
-                const sizeFactors = [0.7, 0.85, 1, 1.15, 1.3];
-                const sizeFactor = sizeFactors[currentSize - 1];
-                
-                tunnelWalls.forEach((wall, index) => {
-                    const baseSize = 200;
-                    const newSize = baseSize * sizeFactor;
-                    wall.style.width = `${newSize}px`;
-                    wall.style.height = `${newSize}px`;
-                });
-                
-                const centerSize = 150 * sizeFactor;
-                centerElement.style.width = `${centerSize}px`;
-                centerElement.style.height = `${centerSize}px`;
-            }
+            // 更新透视距离
+            perspectiveControl.addEventListener('input', function() {
+                const perspective = this.value;
+                document.documentElement.style.setProperty('--perspective', `${perspective}px`);
+                perspectiveValue.textContent = `${perspective}px`;
+            });
             
-            // 切换动画播放状态
-            function toggleAnimations() {
-                tunnelWalls.forEach(wall => {
-                    if (isPlaying) {
-                        wall.style.animationPlayState = 'running';
-                    } else {
-                        wall.style.animationPlayState = 'paused';
-                    }
-                });
-                
-                if (isPlaying) {
-                    centerElement.style.animationPlayState = 'running';
-                } else {
-                    centerElement.style.animationPlayState = 'paused';
-                }
-            }
+            // 更新光照强度
+            lightControl.addEventListener('input', function() {
+                const light = this.value / 100;
+                document.documentElement.style.setProperty('--light-intensity', light);
+                lightValue.textContent = `${this.value}%`;
+            });
             
-            // 随机化效果
-            function randomizeEffects() {
-                // 随机速度 (1-10)
-                const randomSpeed = Math.floor(Math.random() * 10) + 1;
+            // 更新粒子密度
+            particleControl.addEventListener('input', function() {
+                const particles = this.value;
+                generateParticles(particles);
+                particleValue.textContent = particles;
+            });
+            
+            // 随机效果
+            randomizeBtn.addEventListener('click', function() {
+                // 随机色调
+                const randomHue = Math.floor(Math.random() * 360);
+                hueControl.value = randomHue;
+                const secondaryHue = (randomHue + 80) % 360;
+                document.documentElement.style.setProperty('--primary-hue', randomHue);
+                document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
+                hueValue.textContent = `${randomHue}°`;
+                
+                // 随机速度
+                const randomSpeed = (Math.random() * 2.9 + 0.1).toFixed(1);
                 speedControl.value = randomSpeed;
-                currentSpeed = randomSpeed;
-                updateSpeedValue();
+                document.documentElement.style.setProperty('--animation-speed', randomSpeed);
+                speedValue.textContent = '随机';
                 
-                // 随机颜色 (1-3)
-                const randomColor = Math.floor(Math.random() * 3) + 1;
-                colorControl.value = randomColor;
-                currentColor = randomColor;
-                updateColorValue();
+                // 随机深度
+                const randomDepth = Math.floor(Math.random() * 1500) + 500;
+                depthControl.value = randomDepth;
+                document.documentElement.style.setProperty('--tunnel-depth', `${randomDepth}px`);
+                depthValue.textContent = `${randomDepth}px`;
                 
-                // 随机尺寸 (1-5)
-                const randomSize = Math.floor(Math.random() * 5) + 1;
-                tunnelSize.value = randomSize;
-                currentSize = randomSize;
-                updateSizeValue();
+                // 随机透视
+                const randomPerspective = Math.floor(Math.random() * 1500) + 500;
+                perspectiveControl.value = randomPerspective;
+                document.documentElement.style.setProperty('--perspective', `${randomPerspective}px`);
+                perspectiveValue.textContent = `${randomPerspective}px`;
                 
-                // 应用所有更改
-                updateAnimations();
-                updateColorTheme();
-                updateTunnelSize();
-            }
+                // 随机光照
+                const randomLight = Math.floor(Math.random() * 100);
+                lightControl.value = randomLight;
+                document.documentElement.style.setProperty('--light-intensity', randomLight / 100);
+                lightValue.textContent = `${randomLight}%`;
+                
+                // 随机粒子
+                const randomParticles = Math.floor(Math.random() * 90) + 10;
+                particleControl.value = randomParticles;
+                generateParticles(randomParticles);
+                particleValue.textContent = randomParticles;
+                
+                // 随机混合模式
+                const blendModes = ['normal', 'screen', 'overlay', 'difference', 'multiply'];
+                const randomBlendMode = blendModes[Math.floor(Math.random() * blendModes.length)];
+                blendMode.value = randomBlendMode;
+                document.documentElement.style.setProperty('--blend-mode', randomBlendMode);
+            });
+            
+            // 预设1: 深空蓝
+            preset1Btn.addEventListener('click', function() {
+                hueControl.value = 220;
+                const secondaryHue = (220 + 80) % 360;
+                document.documentElement.style.setProperty('--primary-hue', '220');
+                document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
+                hueValue.textContent = '220°';
+                
+                blendMode.value = 'screen';
+                document.documentElement.style.setProperty('--blend-mode', 'screen');
+                
+                speedControl.value = 1;
+                document.documentElement.style.setProperty('--animation-speed', '1');
+                speedValue.textContent = '正常';
+            });
+            
+            // 预设2: 霓虹紫
+            preset2Btn.addEventListener('click', function() {
+                hueControl.value = 300;
+                const secondaryHue = (300 + 80) % 360;
+                document.documentElement.style.setProperty('--primary-hue', '300');
+                document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
+                hueValue.textContent = '300°';
+                
+                blendMode.value = 'overlay';
+                document.documentElement.style.setProperty('--blend-mode', 'overlay');
+                
+                speedControl.value = 1.5;
+                document.documentElement.style.setProperty('--animation-speed', '1.5');
+                speedValue.textContent = '快速';
+                
+                lightControl.value = 90;
+                document.documentElement.style.setProperty('--light-intensity', '0.9');
+                lightValue.textContent = '90%';
+            });
             
             // 重置效果
-            function resetEffects() {
-                speedControl.value = 5;
-                colorControl.value = 1;
-                tunnelSize.value = 3;
+            resetBtn.addEventListener('click', function() {
+                hueControl.value = 220;
+                const secondaryHue = (220 + 80) % 360;
+                document.documentElement.style.setProperty('--primary-hue', '220');
+                document.documentElement.style.setProperty('--secondary-hue', secondaryHue);
+                hueValue.textContent = '220°';
                 
-                currentSpeed = 5;
-                currentColor = 1;
-                currentSize = 3;
+                speedControl.value = 1;
+                document.documentElement.style.setProperty('--animation-speed', '1');
+                speedValue.textContent = '正常';
                 
-                updateSpeedValue();
-                updateColorValue();
-                updateSizeValue();
+                blendMode.value = 'screen';
+                document.documentElement.style.setProperty('--blend-mode', 'screen');
                 
-                // 确保动画在播放状态
-                isPlaying = true;
-                playPauseBtn.textContent = '暂停动画';
+                depthControl.value = 1200;
+                document.documentElement.style.setProperty('--tunnel-depth', '1200px');
+                depthValue.textContent = '1200px';
                 
-                updateAnimations();
-                updateColorTheme();
-                updateTunnelSize();
-                toggleAnimations();
-            }
-            
-            // 初始化颜色变量
-            document.documentElement.style.setProperty('--primary-color', '#6a11cb');
-            document.documentElement.style.setProperty('--secondary-color', '#2575fc');
-            
-            // 初始化显示值
-            updateSpeedValue();
-            updateColorValue();
-            updateSizeValue();
+                perspectiveControl.value = 1000;
+                document.documentElement.style.setProperty('--perspective', '1000px');
+                perspectiveValue.textContent = '1000px';
+                
+                lightControl.value = 70;
+                document.documentElement.style.setProperty('--light-intensity', '0.7');
+                lightValue.textContent = '70%';
+                
+                particleControl.value = 50;
+                generateParticles(50);
+                particleValue.textContent = '50';
+            });
         });
     </script>
 </body>
